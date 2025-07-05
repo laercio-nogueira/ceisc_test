@@ -1,0 +1,22 @@
+services:
+    db:
+        image: postgres:16
+        container_name: postgres
+        restart: unless-stopped
+        environment:
+            POSTGRES_DB: project-db
+            POSTGRES_USER: admin
+            POSTGRES_PASSWORD: password
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
+        ports:
+            - "5432:5432"
+        networks:
+            - laravel
+
+volumes:
+    postgres_data:
+
+networks:
+    laravel:
+        driver: bridge
