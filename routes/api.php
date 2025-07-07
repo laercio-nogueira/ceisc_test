@@ -2,20 +2,32 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\ApiAuthController;
 
-Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login']);
+// Rotas públicas
+Route::post('/auth/login', [ApiAuthController::class, 'login']);
 
+// Rotas protegidas
 Route::middleware('auth:api')->group(function () {
-    Route::post('/logout', [AuthController::class, 'logout']);
-    Route::get('/user', function (Request $request) {
-        return $request->user();
+    Route::post('/auth/logout', [ApiAuthController::class, 'logout']);
+    Route::get('/auth/user', [ApiAuthController::class, 'user']);
+    Route::post('/auth/refresh', [ApiAuthController::class, 'refresh']);
+
+    // Rotas de planos
+    Route::get('/plans', function () {
+        return \App\Models\Plan::active()->get();
     });
 
+    Route::post('/plans/assign', function (Request $request) {
+        // Implementar atribuição de plano via API
+        return response()->json(['message' => 'Plano atribuído via API']);
+    });
+
+    // Rotas de admin
     Route::middleware('scope:admin')->group(function () {
-        Route::get('/admin', function () {
-            return response()->json(['message' => 'Acesso permitido apenas para administradores']);
+        Route::get('/admin/stats', function () {
+            // Implementar estatísticas do admin via API
+            return response()->json(['message' => 'Estatísticas do admin']);
         });
     });
 });

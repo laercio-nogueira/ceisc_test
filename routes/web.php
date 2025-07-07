@@ -16,6 +16,11 @@ Route::middleware('guest')->group(function () {
     Route::post('/register', [AuthController::class, 'register']);
 });
 
+// Rota para teste OAuth2
+Route::get('/oauth-test', function () {
+    return view('oauth-test');
+})->name('oauth.test');
+
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/dashboard', [HomeController::class, 'dashboard'])->name('dashboard');
