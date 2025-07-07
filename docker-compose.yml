@@ -21,7 +21,7 @@ services:
             - db
         networks:
             - laravel
-        command: sh -c "php artisan migrate --force && php-fpm"
+        command: sh -c "php artisan migrate --force && php artisan db:seed && php-fpm"
 
     nginx:
         image: nginx:1.25

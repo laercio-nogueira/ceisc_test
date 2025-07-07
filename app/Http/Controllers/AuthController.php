@@ -61,8 +61,10 @@ class AuthController
 
         Auth::login($user);
 
-        $token = $user->createToken('authToken', [$user->role])->accessToken;
-        session(['access_token' => $token]);
+        if ($request->user()->token()) {
+            $token = $user->createToken('authToken', [$user->role])->accessToken;
+            session(['access_token' => $token]);
+        }
 
         return redirect()->route('dashboard');
     }
