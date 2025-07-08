@@ -14,7 +14,7 @@ Este projeto é uma aplicação web baseada em Laravel, customizada para o desaf
 
 1. Clone o repositório:
    ```bash
-   git clone <repo-url>
+   git clone https://github.com/laercio-nogueira/ceisc_test.git
    cd test ceisc
    ```
 2. Instale as dependências PHP:
