@@ -156,12 +156,19 @@ php artisan migrate
 
 ## Rodando via Docker
 
+> **Atenção:** Antes de rodar o Docker Compose, certifique-se de copiar o arquivo `.env.example` para `.env` e preencher as chaves STRIPE_KEY e STRIPE_SECRET corretamente, conforme instruções acima.
+
 1. Certifique-se de ter Docker e Docker Compose instalados.
-2. Suba os containers:
+2. Copie o arquivo de variáveis de ambiente:
+   ```bash
+   cp .env.example .env
+   ```
+3. Edite o arquivo `.env` e preencha as chaves STRIPE_KEY e STRIPE_SECRET.
+4. Suba os containers:
    ```bash
    docker compose up --build
    ```
-3. O serviço estará disponível em `http://localhost:8000` (ajuste conforme seu docker-compose.yml).
+5. O serviço estará disponível em `http://localhost:8000` (ajuste conforme seu docker-compose.yml).
 
 ## Testes Automatizados
 
