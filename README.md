@@ -12,6 +12,20 @@ Este projeto é uma aplicação web baseada em Laravel, customizada para o desaf
 
 ## Rodando Localmente
 
+> **Atenção:** Para rodar localmente, é necessário:
+> - Ter um banco de dados PostgreSQL em execução.
+> - O banco deve estar vazio ou conter as tabelas criadas pelas migrations do Laravel.
+> - Configure o arquivo `.env` conforme o exemplo abaixo:
+>
+> ```env
+> DB_CONNECTION=pgsql
+> DB_HOST=127.0.0.1
+> DB_PORT=5432
+> DB_DATABASE=nome_do_banco
+> DB_USERNAME=usuario
+> DB_PASSWORD=senha
+> ```
+
 1. Clone o repositório:
    ```bash
    git clone https://github.com/laercio-nogueira/ceisc_test.git
@@ -43,6 +57,29 @@ Este projeto é uma aplicação web baseada em Laravel, customizada para o desaf
    php artisan serve
    ```
    O projeto estará disponível em [http://localhost:8080](http://localhost:8000)
+
+### Usuários de Login Padrão
+
+Após rodar as migrations e seeders, você pode acessar o sistema com os seguintes usuários:
+
+- **Usuário comum**
+  - Email: test@example.com
+  - Senha: password123
+
+- **Usuário admin**
+  - Email: admin@example.com
+  - Senha: password123
+
+### Cartão de Crédito de Teste (Stripe)
+
+Para testar pagamentos, utilize o cartão de teste fornecido pela Stripe:
+
+- **Número:** 4242 4242 4242 4242
+- **Validade:** Qualquer data futura (ex: 12/34)
+- **CVV:** Qualquer código de 3 dígitos (ex: 123)
+- **CEP:** Qualquer valor
+
+Mais informações: [Stripe Docs - Testing](https://docs.stripe.com/testing#cards)
 
 ## Rodando as Migrations
 
