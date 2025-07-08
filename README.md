@@ -147,6 +147,28 @@ Para testar pagamentos, utilize o cartão de teste fornecido pela Stripe:
 
 Mais informações: [Stripe Docs - Testing](https://docs.stripe.com/testing#cards)
 
+## Rotas Web
+
+| Método    | URI                        | Nome                        | Controller@Ação                        |
+|-----------|----------------------------|-----------------------------|-----------------------------------------|
+| GET/HEAD  | /                          | login                       | AuthController@showLoginForm            |
+| POST      | /                          |                             | AuthController@login                    |
+| GET/HEAD  | register                   | register                    | AuthController@showRegisterForm         |
+| POST      | register                   |                             | AuthController@register                 |
+| POST      | logout                     | logout                      | AuthController@logout                   |
+| GET/HEAD  | dashboard                  | dashboard                   | HomeController@dashboard                |
+| GET/HEAD  | admin                      | admin                       | AdminController@index                   |
+| GET/HEAD  | admin/plans                | admin.plans.index           | AdminPlanController@index               |
+| GET/HEAD  | admin/plans/{userPlan}     | admin.plans.show            | AdminPlanController@show                |
+| PUT       | admin/plans/{userPlan}/status | admin.plans.update-status | AdminPlanController@updateStatus        |
+| GET/HEAD  | admin/users/{user}/plans   | admin.plans.user-plans      | AdminPlanController@userPlans           |
+| GET/HEAD  | payment                    | payment.form                | PaymentController@showPaymentForm       |
+| POST      | payment/process            | payment.process             | PaymentController@processPayment        |
+| GET/HEAD  | plans/my-plan              | plans.my-plan               | PlanController@myPlan                   |
+| POST      | plans/assign               | plans.assign                | PlanController@assignPlan               |
+
+> Para rotas de API, consulte a documentação Swagger em `/api/documentation`.
+
 ## Rodando as Migrations
 
 Com o banco configurado, execute:
@@ -173,6 +195,21 @@ php artisan migrate
 ## Testes Automatizados
 
 Consulte o arquivo [`TESTS_README.md`](./TESTS_README.md) para instruções detalhadas sobre como rodar e escrever testes.
+
+## Documentação da API (Swagger)
+
+Este projeto utiliza o [Swagger UI](https://swagger.io/tools/swagger-ui/) para documentar e testar a API.
+
+**Como usar:**
+
+1. Gere a documentação:
+   ```bash
+   php artisan l5-swagger:generate
+   ```
+2. Acesse a interface web:
+   [http://localhost:8000/api/documentation](http://localhost:8000/api/documentation)
+
+As anotações OpenAPI devem ser feitas nos controllers. Veja exemplos em [DarkaOnLine/L5-Swagger](https://github.com/DarkaOnLine/L5-Swagger).
 
 ---
 
