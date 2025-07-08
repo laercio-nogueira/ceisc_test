@@ -13,18 +13,9 @@
             'resources/js/app.js'
         ])
     @endif
-    <style>
-        body {
-            padding-top: 56px;
-        }
-        .auth-card {
-            max-width: 500px;
-            margin: 0 auto;
-        }
-    </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
             <a class="navbar-brand" href="/">TechFlix</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">

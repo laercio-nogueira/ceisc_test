@@ -170,7 +170,7 @@
                                 <td>
                                     @if($user->role !== 'admin')
                                         @if($user->active ?? true)
-                                            <button class="btn btn-sm btn-warning">Inativar</button>
+                                            <button class="btn btn-sm btn-danger">Inativar</button>
                                         @else
                                             <button class="btn btn-sm btn-success">Ativar</button>
                                         @endif
@@ -186,14 +186,16 @@
         <div class="col-md-6">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Planos de Usuários Recentes</h5>
+                    <h5 class="card-title">
+                        Planos de Usuários Recentes
+                        <a href="/admin/plans/" class="btn-link float-end">Gerenciar</a>
+                    </h5>
                     <table class="table table-striped">
                         <thead>
                             <tr>
                                 <th>Usuário</th>
                                 <th>Plano</th>
                                 <th>Status</th>
-                                <th>Ação</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -208,13 +210,6 @@
                                         <span class="badge bg-secondary">Inativo</span>
                                     @else
                                         <span class="badge bg-warning">Expirado</span>
-                                    @endif
-                                </td>
-                                <td>
-                                    @if($userPlan->status === 'active')
-                                        <button class="btn btn-sm btn-warning">Inativar</button>
-                                    @else
-                                        <button class="btn btn-sm btn-success">Ativar</button>
                                     @endif
                                 </td>
                             </tr>

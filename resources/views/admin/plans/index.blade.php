@@ -1,8 +1,26 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
+<style>
+.dropdown-menu {
+    z-index: 9999 !important;
+    position: absolute !important;
+}
+
+.btn-group {
+    position: relative;
+}
+
+.table-responsive {
+    overflow: visible !important;
+}
+
+.card-body {
+    overflow: visible !important;
+}
+</style>
+<div class="container pb-5">
+    <div class="row justify-content-center h-100">
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
@@ -98,7 +116,7 @@
                                                     data-bs-toggle="dropdown">
                                                 Status
                                             </button>
-                                            <ul class="dropdown-menu">
+                                            <ul class="dropdown-menu" style="z-index: 9999; position: absolute;">
                                                 <li><a class="dropdown-item" href="#"
                                                        onclick="updateStatus({{ $userPlan->id }}, 'active')">Ativo</a></li>
                                                 <li><a class="dropdown-item" href="#"
