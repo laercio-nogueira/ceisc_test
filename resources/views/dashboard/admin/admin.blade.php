@@ -228,15 +228,15 @@
         const ctx = document.getElementById('plansByMonthChart').getContext('2d');
         const data = {
             labels: [
-                @foreach($plansByMonth as $item)
+                @foreach($stats as $item)
                     '{{ str_pad($item->month, 2, '0', STR_PAD_LEFT) }}/{{ $item->year }}',
                 @endforeach
             ],
             datasets: [{
                 label: 'Planos Ativos',
                 data: [
-                    @foreach($plansByMonth as $item)
-                        {{ $item->total }},
+                    @foreach($stats as $item)
+                        {{ data_get($item, 'total', 0) }},
                     @endforeach
                 ],
                 backgroundColor: 'rgba(102, 126, 234, 0.5)',

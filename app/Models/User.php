@@ -32,6 +32,10 @@ class User extends Authenticatable
         'active' => 'boolean',
     ];
 
+    protected $attributes = [
+        'role' => 'user',
+    ];
+
     public function isAdmin()
     {
         return $this->role === 'admin';

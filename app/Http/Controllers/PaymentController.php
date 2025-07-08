@@ -47,7 +47,9 @@ class PaymentController extends Controller
         $plan = Plan::findOrFail($request->plan_id);
         $amountPaid = 0;
 
-        switch ($request->period) {
+        $billingPeriod = $request->input('billing_period', 'monthly');
+
+        switch ($billingPeriod) {
             case 'monthly':
                 $expiresAt = Carbon::now()->addMonth();
                 $amountPaid = $plan->price_monthly;
@@ -66,19 +68,28 @@ class PaymentController extends Controller
 
         if ($paymentSuccess) {
             $expiresAt = null;
+            if ($billingPeriod === 'monthly') {
+                $expiresAt = now()->addMonth();
+            } elseif ($billingPeriod === 'semiannual') {
+                $expiresAt = now()->addMonths(6);
+            } elseif ($billingPeriod === 'annual') {
+                $expiresAt = now()->addYear();
+            } else {
+                $expiresAt = now()->addMonth(); // fallback
+            }
             $user->userPlans()
                  ->where('status', 'active')
                  ->update(['status' => 'inactive']);
 
-            UserPlan::create([
+            $userPlan = UserPlan::create([
                 'user_id' => $user->id,
                 'plan_id' => $plan->id,
                 'status' => 'active',
                 'started_at' => Carbon::now(),
                 'expires_at' => $expiresAt,
-                'billing_period' => $request->period,
+                'billing_period' => $billingPeriod,
                 'amount_paid' => $amountPaid,
-                'notes' => "Plano {$plan->name} - Período {$request->period} - Pagamento aprovado"
+                'notes' => "Plano {$plan->name} - Período {$billingPeriod} - Pagamento aprovado"
             ]);
 
             return $paymentSuccess;
