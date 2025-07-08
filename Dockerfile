@@ -1,5 +1,3 @@
-FROM composer:2 as composer
-
 FROM php:8.2-fpm
 
 # Instalar dependências
@@ -14,7 +12,7 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-install pdo pdo_pgsql mbstring xml
 
 # Instalar composer
-COPY --from=composer /usr/bin/composer /usr/bin/composer
+COPY ./composer /usr/bin/composer
 
 WORKDIR /var/www
 
