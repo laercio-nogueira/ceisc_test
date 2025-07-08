@@ -13,14 +13,14 @@ return new class extends Migration
     {
         Schema::create('plans', function (Blueprint $table) {
             $table->id();
-            $table->string('name'); // Básico, Intermediário, Avançado
-            $table->string('slug')->unique(); // basic, intermediate, advanced
+            $table->string('name');
+            $table->string('slug')->unique();
             $table->text('description');
             $table->decimal('price_monthly', 8, 2);
             $table->decimal('price_semiannual', 8, 2);
             $table->decimal('price_annual', 8, 2);
-            $table->integer('screens'); // Número de telas permitidas
-            $table->json('features'); // Array de recursos do plano
+            $table->integer('screens');
+            $table->json('features');
             $table->boolean('is_popular')->default(false);
             $table->boolean('is_active')->default(true);
             $table->timestamps();

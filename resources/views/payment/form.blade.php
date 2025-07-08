@@ -165,62 +165,16 @@
                     <form id="paymentForm">
                         <input type="hidden" name="plan_id" value="{{ $plan->id }}">
                         <input type="hidden" name="period" value="{{ $period }}">
-
+                        <input type="hidden" id="amount" value="{{ intval($amount * 100) }}">
                         <div class="form-group">
-                            <label class="form-label">Número do Cartão</label>
-                            <div class="card-input-group">
-                                <input type="text"
-                                       class="form-control"
-                                       name="card_number"
-                                       id="card_number"
-                                       placeholder="0000 0000 0000 0000"
-                                       maxlength="19"
-                                       required>
-                                <i class="card-icon fas fa-credit-card"></i>
-                            </div>
+                            <label class="form-label">Cartão de Crédito</label>
+                            <div id="card-element" class="form-control"></div>
                         </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Nome no Cartão</label>
-                            <input type="text"
-                                   class="form-control"
-                                   name="card_holder"
-                                   id="card_holder"
-                                   placeholder="Nome como está no cartão"
-                                   required>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label class="form-label">Validade</label>
-                                    <input type="text"
-                                           class="form-control"
-                                           name="card_expiry"
-                                           id="card_expiry"
-                                           placeholder="MM/AA"
-                                           maxlength="5"
-                                           required>
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label class="form-label">CVV</label>
-                                    <input type="text"
-                                           class="form-control"
-                                           name="card_cvv"
-                                           id="card_cvv"
-                                           placeholder="123"
-                                           maxlength="4"
-                                           required>
-                                </div>
-                            </div>
-                        </div>
-
                         <button type="submit" class="btn btn-pay" id="payButton">
                             <i class="fas fa-lock me-2"></i>Pagar R$ {{ number_format($amount, 2, ',', '.') }}
                         </button>
                     </form>
+                    <div id="payment-message" class="mt-3 text-center"></div>
 
                     <div class="security-badge">
                         <i class="fas fa-shield-alt"></i>
@@ -238,72 +192,65 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://js.stripe.com/v3/"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            const stripe = Stripe('{{ env('STRIPE_KEY') }}');
+            const elements = stripe.elements();
+            const card = elements.create('card');
+            card.mount('#card-element');
+
             const form = document.getElementById('paymentForm');
             const payButton = document.getElementById('payButton');
-            const cardNumber = document.getElementById('card_number');
-            const cardExpiry = document.getElementById('card_expiry');
-            const cardCvv = document.getElementById('card_cvv');
+            const paymentMessage = document.getElementById('payment-message');
+            const amount = document.getElementById('amount').value;
 
-            cardNumber.addEventListener('input', function(e) {
-                let value = e.target.value.replace(/\D/g, '');
-                value = value.replace(/(\d{4})(?=\d)/g, '$1 ');
-                e.target.value = value;
-            });
-
-            cardExpiry.addEventListener('input', function(e) {
-                let value = e.target.value.replace(/\D/g, '');
-                if (value.length >= 2) {
-                    value = value.substring(0, 2) + '/' + value.substring(2, 4);
-                }
-                e.target.value = value;
-            });
-
-            cardCvv.addEventListener('input', function(e) {
-                e.target.value = e.target.value.replace(/\D/g, '');
-            });
-
-            form.addEventListener('submit', function(e) {
+            form.addEventListener('submit', async function(e) {
                 e.preventDefault();
-
                 payButton.disabled = true;
                 payButton.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Processando...';
+                paymentMessage.textContent = '';
 
-                const formData = new FormData(form);
-                const data = {
-                    plan_id: formData.get('plan_id'),
-                    period: formData.get('period'),
-                    card_number: formData.get('card_number').replace(/\s/g, ''),
-                    card_holder: formData.get('card_holder'),
-                    card_expiry: formData.get('card_expiry'),
-                    card_cvv: formData.get('card_cvv')
-                };
+                const {paymentMethod, error} = await stripe.createPaymentMethod({
+                    type: 'card',
+                    card: card,
+                });
 
-                fetch('{{ route("payment.process") }}', {
+                if (error) {
+                    paymentMessage.textContent = error.message;
+                    payButton.disabled = false;
+                    payButton.innerHTML = '<i class="fas fa-lock me-2"></i>Pagar R$ {{ number_format($amount, 2, ",", ".") }}';
+                    return;
+                }
+
+                fetch('/payment/process', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
                         'Accept': 'application/json'
                     },
-                    body: JSON.stringify(data)
+                    body: JSON.stringify({
+                        payment_method_id: paymentMethod.id,
+                        plan_id: '{{ $plan->id }}',
+                        period: '{{ $period }}',
+                        amount: amount
+                    })
                 })
                 .then(response => response.json())
                 .then(data => {
-                    if (data.success) {
-                        alert(data.message);
-                        window.location.href = data.redirect_url;
+                    if (data.status === 'succeeded') {
+                        paymentMessage.textContent = 'Pagamento aprovado!';
+                        setTimeout(() => window.location.href = '{{ route('dashboard') }}', 1500);
                     } else {
-                        alert(data.message || 'Erro ao processar pagamento');
+                        paymentMessage.textContent = data.error || 'Pagamento recusado!';
                         payButton.disabled = false;
                         payButton.innerHTML = '<i class="fas fa-lock me-2"></i>Pagar R$ {{ number_format($amount, 2, ",", ".") }}';
                     }
                 })
                 .catch(error => {
-                    console.error('Erro:', error);
-                    alert('Erro ao processar pagamento. Tente novamente.');
+                    paymentMessage.textContent = 'Erro ao processar pagamento. Tente novamente.';
                     payButton.disabled = false;
                     payButton.innerHTML = '<i class="fas fa-lock me-2"></i>Pagar R$ {{ number_format($amount, 2, ",", ".") }}';
                 });

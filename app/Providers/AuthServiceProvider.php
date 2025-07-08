@@ -16,13 +16,11 @@ class AuthServiceProvider extends ServiceProvider
 
         Passport::routes();
 
-        // Defina escopos para as permissões
         Passport::tokensCan([
             'admin' => 'Acesso total ao sistema',
             'user' => 'Acesso básico ao sistema',
         ]);
 
-        // Escopo padrão
         Passport::setDefaultScope([
             'user',
         ]);

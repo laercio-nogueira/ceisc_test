@@ -27,7 +27,6 @@ class ApiAuthController extends Controller
             ]);
         }
 
-        // Criar token de acesso
         $token = $user->createToken('auth-token')->accessToken;
 
         return response()->json([
@@ -49,10 +48,8 @@ class ApiAuthController extends Controller
     {
         $token = $request->user()->token();
 
-        // Revogar token
         $token->revoke();
 
-        // Revogar refresh tokens
         $refreshTokenRepository = app(RefreshTokenRepository::class);
         $refreshTokenRepository->revokeRefreshTokensByAccessTokenId($token->id);
 

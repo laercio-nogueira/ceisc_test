@@ -7,6 +7,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\PlanController;
 use App\Http\Controllers\AdminPlanController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\StripePaymentController;
 
 Route::middleware('guest')->group(function () {
     Route::get('/', [AuthController::class, 'showLoginForm'])->name('login');
@@ -16,7 +17,6 @@ Route::middleware('guest')->group(function () {
     Route::post('/register', [AuthController::class, 'register']);
 });
 
-// Rota para teste OAuth2
 Route::get('/oauth-test', function () {
     return view('oauth-test');
 })->name('oauth.test');
