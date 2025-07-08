@@ -17,6 +17,8 @@ services:
             DB_DATABASE: project-db
             DB_USERNAME: admin
             DB_PASSWORD: password
+            STRIPE_KEY: pk_test_XXXX
+            STRIPE_SECRET: sk_test_XXXX
         depends_on:
             - db
         networks:

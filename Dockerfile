@@ -17,6 +17,7 @@ COPY ./composer /usr/bin/composer
 WORKDIR /var/www
 
 COPY . .
+COPY .env.example .env
 COPY ./default.conf /etc/nginx/conf.d/default.conf
 
 RUN composer install --no-interaction --prefer-dist --optimize-autoloader

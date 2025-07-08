@@ -86,26 +86,27 @@ php artisan migrate:fresh --seed
 > DB_DATABASE=nome_do_banco
 > DB_USERNAME=usuario
 > DB_PASSWORD=senha
-> ```
+> 
+ ```
 
 1. Clone o repositório:
    ```bash
    git clone https://github.com/laercio-nogueira/ceisc_test.git
    cd test ceisc
    ```
-2. Instale as dependências PHP:
-   ```bash
-   composer install
-   ```
-3. Instale as dependências JS:
-   ```bash
-   npm install
-   ```
-4. Copie o arquivo de ambiente:
+2. Copie o arquivo de variáveis de ambiente:
    ```bash
    cp .env.example .env
    ```
-5. Configure as variáveis do banco de dados no `.env`.
+3. Instale as dependências PHP:
+   ```bash
+   composer install
+   ```
+4. Instale as dependências JS:
+   ```bash
+   npm install
+   ```
+5. Configure as variáveis do banco de dados e outras no `.env`.
 6. Gere a chave da aplicação:
    ```bash
    php artisan key:generate
