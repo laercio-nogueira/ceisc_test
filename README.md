@@ -86,8 +86,11 @@ php artisan migrate:fresh --seed
 > DB_DATABASE=nome_do_banco
 > DB_USERNAME=usuario
 > DB_PASSWORD=senha
-> 
- ```
+> STRIPE_KEY=pk_test_sua_chave_aqui
+> STRIPE_SECRET=sk_test_sua_chave_aqui
+> ```
+>
+> ⚠️ **As chaves STRIPE_KEY e STRIPE_SECRET não são fornecidas no repositório por segurança. Solicite as chaves ao responsável pelo projeto ou obtenha suas próprias chaves de teste no painel da Stripe. Após receber, preencha no arquivo `.env` local.**
 
 1. Clone o repositório:
    ```bash
