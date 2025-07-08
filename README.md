@@ -34,6 +34,15 @@ Este projeto é uma aplicação web baseada em Laravel, customizada para o desaf
    ```bash
    php artisan key:generate
    ```
+7. Rode as migrations:
+   ```bash
+   php artisan migrate
+   ```
+8. Inicie o servidor de desenvolvimento:
+   ```bash
+   php artisan serve
+   ```
+   O projeto estará disponível em [http://localhost:8080](http://localhost:8000)
 
 ## Rodando as Migrations
 
